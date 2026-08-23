@@ -1,5 +1,7 @@
 package com.careerflow.controller;
 
+import com.careerflow.dto.LoginRequest;
+import com.careerflow.dto.LoginResponse;
 import com.careerflow.dto.RegisterUserRequest;
 import com.careerflow.dto.UserResponse;
 import com.careerflow.service.UserService;
@@ -25,5 +27,11 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterUserRequest request){
         UserResponse response = userService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
+        LoginResponse response = userService.login(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
