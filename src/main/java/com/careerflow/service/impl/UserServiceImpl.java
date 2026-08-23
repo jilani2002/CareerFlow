@@ -10,6 +10,7 @@ import com.careerflow.exception.InvalidCredentialsException;
 import com.careerflow.exception.InvalidUserRoleException;
 import com.careerflow.exception.UserAlreadyExistingException;
 import com.careerflow.repository.UserRepository;
+import com.careerflow.security.JwtService;
 import com.careerflow.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -61,6 +64,8 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
+        String accessToken = jwtService.generateToken(entity.getEmail());
+
         LoginResponse response = new LoginResponse();
         response.setUserId(entity.getUserId());
         response.setFirstName(entity.getFirstName());
@@ -68,6 +73,7 @@ public class UserServiceImpl implements UserService {
         response.setEmail(entity.getEmail());
         response.setRole(entity.getRole());
         response.setMessage("Login successful");
+        response.setAccessToken(accessToken);
         return response;
     }
 

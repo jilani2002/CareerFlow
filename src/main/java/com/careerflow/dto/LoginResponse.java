@@ -16,4 +16,5 @@ public class LoginResponse {
     private String email;
     private UserRole role;
     private String message;
+    private String accessToken;
 }
