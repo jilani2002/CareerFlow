@@ -1,15 +1,20 @@
 package com.careerflow.service.impl;
 
+import com.careerflow.dto.LoginRequest;
+import com.careerflow.dto.LoginResponse;
 import com.careerflow.dto.RegisterUserRequest;
 import com.careerflow.dto.UserResponse;
 import com.careerflow.entity.UserEntity;
 import com.careerflow.entity.UserRole;
+import com.careerflow.exception.InvalidCredentialsException;
 import com.careerflow.exception.InvalidUserRoleException;
 import com.careerflow.exception.UserAlreadyExistingException;
 import com.careerflow.repository.UserRepository;
 import com.careerflow.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,6 +46,29 @@ public class UserServiceImpl implements UserService {
         entity.setRole(request.getRole());
         UserEntity savedEntity = repository.save(entity);
         return getResponse(savedEntity);
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+
+        Optional<UserEntity> user = repository.findByEmail(request.getEmail());
+        if(user.isEmpty()){
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        UserEntity entity = user.get();
+        if (!passwordEncoder.matches(request.getPassword(), entity.getPassword())){
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        LoginResponse response = new LoginResponse();
+        response.setUserId(entity.getUserId());
+        response.setFirstName(entity.getFirstName());
+        response.setLastName(entity.getLastName());
+        response.setEmail(entity.getEmail());
+        response.setRole(entity.getRole());
+        response.setMessage("Login successful");
+        return response;
     }
 
     private UserResponse getResponse(UserEntity entity) {
