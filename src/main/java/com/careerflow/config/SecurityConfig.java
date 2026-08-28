@@ -1,7 +1,6 @@
 package com.careerflow.config;
 
 import com.careerflow.repository.UserRepository;
-import com.careerflow.security.JwtAuthenticationEntryPoint;
 import com.careerflow.security.JwtAuthenticationFilter;
 import com.careerflow.security.JwtService;
 import org.springframework.context.annotation.Bean;
