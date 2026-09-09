@@ -72,6 +72,15 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(JobNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleJobNotFoundException(JobNotFoundException exception) {
+
+        ErrorResponse response = new ErrorResponse();
+        response.setMessage(exception.getMessage());
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setTime(LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(

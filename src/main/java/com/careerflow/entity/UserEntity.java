@@ -50,6 +50,8 @@ public class UserEntity {
 
     private String address;
 
+    private String companyName;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
