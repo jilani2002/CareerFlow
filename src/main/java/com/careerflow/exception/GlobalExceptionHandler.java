@@ -82,6 +82,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException exception) {
+
+        ErrorResponse response = new ErrorResponse();
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(exception.getMessage());
+        response.setTime(LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException exception) {
