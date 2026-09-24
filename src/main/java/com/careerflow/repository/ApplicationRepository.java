@@ -16,4 +16,8 @@ public interface ApplicationRepository
     List<ApplicationEntity> findByCandidateOrderByAppliedAtDesc(UserEntity candidate);
 
     Optional<ApplicationEntity> findByApplicationIdAndCandidate(Long applicationId, UserEntity candidate);
+
+    List<ApplicationEntity> findByJobOrderByAppliedAtDesc(JobEntity job);
+
+    Optional<ApplicationEntity> findByApplicationIdAndJobRecruiter(Long applicationId, UserEntity recruiter);
 }
